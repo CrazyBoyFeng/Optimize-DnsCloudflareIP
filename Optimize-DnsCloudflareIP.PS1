@@ -41,7 +41,7 @@ function Test-IPv4 {
     Param ($IP)
     Copy-Item ip.txt ip.tmp
     Add-Content -Path ip.tmp -Value "`r`n$IP/32"
-    &".\CloudflareST.exe" -tl 500 -sl 0.1 -p 0 -f ip.tmp
+    &".\CloudflareST.exe" -f ip.tmp -httping -n 50 -t 5 -p 0 -dd
     Remove-Item ip.tmp
 }
 
@@ -49,7 +49,7 @@ function Test-IPv6 {
     Param ($IP)
     Copy-Item ipv6.txt ip.tmp
     Add-Content -Path ip.tmp "`r`n$IP/128"
-    &".\CloudflareST.exe" -p 0 -ipv6 -f ip.tmp
+    &".\CloudflareST.exe" -f ip.tmp -httping -n 50 -t 5 -p 0 -dd
     Remove-Item ip.tmp
 }
 
