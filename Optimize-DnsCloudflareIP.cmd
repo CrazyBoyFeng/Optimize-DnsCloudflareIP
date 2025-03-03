@@ -20,7 +20,7 @@ If /I "%1"=="Minimized" (
     )
 ) Else If /I "%1"=="Hidden" (
     Shift /1
-    PowerShell -ExecutionPolicy Unrestricted -NoProfile -WindowStyle Hidden -File "%~dpn0.ps1" %*
+    PowerShell -ExecutionPolicy Unrestricted -NoProfile -WindowStyle Hidden -File "%~dpn0.ps1" %* > Optimize-Dns.CloudflareIP.Out
     Set ExitCode=!ErrorLevel!
     If Not "!ExitCode!"=="0" (
         Echo.
