@@ -19,7 +19,7 @@ function Get-IP {
     $ip = [System.Net.Dns]::GetHostAddresses($name)[0].IPAddressToString
     If (!$ip) {
         Write-Error "Can not get the IP of $name"
-        Exit 1
+        Exit 11
     }
     Write-Host "Current IP: $ip"
     Return $ip
