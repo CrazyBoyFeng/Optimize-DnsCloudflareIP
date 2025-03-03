@@ -22,16 +22,16 @@ function test_ipv4 {
     cp -f ip.txt ip.tmp
     echo "" >> ip.tmp
     echo "$ip/32" >> ip.tmp
-    ./CloudflareST -tl 500 -sl 0.1 -p 0 -f ip.tmp
+    ./CloudflareST-f ip.tmp -httping -n 50 -t 5 -p 0 -dd
     rm -f ip.tmp
 }
 
 function test_ipv6 {
-    cp -f ipv6.txt ipv6.tmp
-    echo "" >> ipv6.tmp
-    echo "$ip/128" >> ipv6.tmp
-    ./CloudflareST -p 0 -ipv6 -f ipv6.tmp
-    rm -f ipv6.tmp
+    cp -f ipv6.txt ip.tmp
+    echo "" >> ip.tmp
+    echo "$ip/128" >> ip.tmp
+    ./CloudflareST-f ip.tmp -httping -n 50 -t 5 -p 0 -dd
+    rm -f ip.tmp
 }
 
 function get_header { #登录

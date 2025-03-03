@@ -13,7 +13,7 @@ function Get-IP {
     $ip = [System.Net.Dns]::GetHostAddresses($Domain)[0].IPAddressToString
     If (!$ip) {
         Write-Error "Can not get the IP of $Domain"
-        Exit 1
+        Exit 11
     }
     Write-Host "Current IP: $ip"
     Return $ip
@@ -51,13 +51,13 @@ function Get-Token {
         $token = $response.Headers["X-Subject-Token"]
         If (!$token) {
             Write-Error "Auth as $Account failed"
-            Exit 11
+            Exit 21
         }
         Write-Host "Auth as $Account successful"
         Return $token
     } Catch {
         Write-Error $_.Exception.Message
-        Exit 12
+        Exit 22
     }
 }
 
@@ -74,7 +74,7 @@ function Search-RecordsetId {
     $recordset_id = $response.recordsets[0].id
     If (!$recordset_id) {
         Write-Error "No valid recordsets with $IP for $Domain. If it has been updated just now, please wait until it takes effect."
-        Exit 21
+        Exit 31
     }
     Return $recordset_id
 }
@@ -100,7 +100,7 @@ function Get-Best {
     $best = (Import-CSV result.csv)[0].psobject.properties.value[0]
     If (!$best) {
         Write-Error "Can not get the best Cloudflare IP"
-        Exit 31
+        Exit 41
     }
     Write-Host "Best Cloudflare IP: $best"
     If ("$IP" -Eq "$best") {
@@ -121,7 +121,7 @@ function Update-IP {
         Write-Output $response
     } catch {
         Write-Error $_.Exception.Message
-        Exit 41
+        Exit 51
     }
     Exit
 }
