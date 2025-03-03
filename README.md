@@ -2,7 +2,7 @@
 脚本：查找最快 Cloudflare IP 并更新域名解析记录。
 
 ## 如何使用
-登录你的 DNS 服务提供商，添加域名解析记录。  
+登录 DNS 服务提供商控制台，添加域名解析记录。  
 _请注意：目标域名的初始 IP 记录不能与其它记录重复。_
 
 ### Windows
@@ -15,7 +15,7 @@ _请注意：目标域名的初始 IP 记录不能与其它记录重复。_
 如需自动定时执行，请查阅任务计划相关知识。
 
 ### 其它操作系统
-1. 下载所用 DNS 服务提供商对应目录内的 `optimize-dns-cloudflare-ip.bash` 至 `CloudflareST` 所在目录。  
+1. 下载 `optimize-dns-cloudflare-ip.bash` 至 `CloudflareST` 所在目录。  
 2. 修改 `optimize-dns-cloudflare-ip.bash`，按要求填写参数。  
 3. 执行 `optimize-dns-cloudflare-ip.bash`。
 
