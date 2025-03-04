@@ -1,10 +1,12 @@
 #!/bin/bash
-#请先去华为云解析后台增加一条A记录或AAAA记录。
+
+#请先去华为云解析后台增加一条 A 记录或 AAAA 记录。
 domain="你的域名（可以是子域名）"
 zone_id="域名 ID（控制台可查）"
 account="用户账户"
 password="用户密码"
 #以上为需要手动填写的内容。
+
 cd `dirname $BASH_SOURCE`
 curl=`command -v curl 2> /dev/null`
 
@@ -18,18 +20,21 @@ function get_ip {
     echo "Current IP: $ip"
 }
 
-function test_ipv4 {
-    cp -f ip.txt ip.tmp
-    echo "" >> ip.tmp
-    echo "$ip/32" >> ip.tmp
-    ./CloudflareST-f ip.tmp -httping -n 50 -t 5 -p 0 -dd
-    rm -f ip.tmp
-}
-
-function test_ipv6 {
-    cp -f ipv6.txt ip.tmp
-    echo "" >> ip.tmp
-    echo "$ip/128" >> ip.tmp
+function test_ip {
+    case $ip in 
+    *"."*)
+        cp -f ip.txt ip.tmp
+        echo "" >> ip.tmp
+        echo "$ip/32" >> ip.tmp
+        ;;
+    *":"*)
+        cp -f ip.txt ip.tmp
+        echo "" >> ip.tmp
+        echo "$ip/32" >> ip.tmp
+        ;;
+    *)
+        exit 2;;
+    esac
     ./CloudflareST-f ip.tmp -httping -n 50 -t 5 -p 0 -dd
     rm -f ip.tmp
 }
@@ -104,14 +109,7 @@ echo
 get_header
 echo
 search_recordset_id
-case $ip in 
-*"."*)
-    test_ipv4;;
-*":"*)
-    test_ipv6;;
-*)
-    exit 2;;
-esac
+test_ip
 echo
 get_best
 echo

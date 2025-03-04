@@ -4,6 +4,7 @@ $zone_id = "域名 ID（控制台可查）"
 $account = "用户账户"
 $password = "用户密码"
 #以上为需要手动填写的内容。
+
 Set-Location -Path $PSScriptRoot
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
@@ -20,7 +21,7 @@ function Get-IP {
 }
 
 function Get-Token {
-    Param($Account,$Password)
+    Param($Account, $Password)
     $body = @"
 {
     "auth": {
@@ -55,21 +56,22 @@ function Get-Token {
         }
         Write-Host "Auth as $Account successful"
         Return $token
-    } Catch {
+    }
+    Catch {
         Write-Error $_.Exception.Message
         Exit 22
     }
 }
 
 function Get-Headers {
-    Param($Account,$Password)
+    Param($Account, $Password)
     $token = Get-Token $Account $Password
     $headers = @{"X-Auth-Token" = $token }
     Return $headers
 }
 
 function Search-RecordsetId {
-    Param($Headers,$Domain,$IP)
+    Param($Headers, $Domain, $IP)
     $response = Invoke-RestMethod -Uri "https://dns.myhuaweicloud.com/v2.1/recordsets?name=$Domain&records=$IP" -Headers $Headers
     $recordset_id = $response.recordsets[0].id
     If (!$recordset_id) {
@@ -79,18 +81,16 @@ function Search-RecordsetId {
     Return $recordset_id
 }
 
-function Test-IPv4 {
+function Test-IP {
     Param ($IP)
-    Copy-Item ip.txt ip.tmp
-    Add-Content -Path ip.tmp -Value "`r`n$IP/32"
-    &".\CloudflareST.exe"-f ip.tmp -httping -n 50 -t 5 -p 0 -dd
-    Remove-Item ip.tmp
-}
-
-function Test-IPv6 {
-    Param ($IP)
-    Copy-Item ipv6.txt ip.tmp
-    Add-Content -Path ip.tmp "`r`n$IP/128"
+    If ($IP.Contains(".")) {
+        Copy-Item ip.txt ip.tmp
+        Add-Content -Path ip.tmp -Value "`r`n$IP/32"
+    }
+    ElseIf ($ip.Contains(":")) {
+        Copy-Item ipv6.txt ip.tmp
+        Add-Content -Path ip.tmp "`r`n$IP/128"
+    }    
     &".\CloudflareST.exe" -f ip.tmp -httping -n 50 -t 5 -p 0 -dd
     Remove-Item ip.tmp
 }
@@ -110,7 +110,7 @@ function Get-Best {
 }
 
 function Update-IP {
-    Param($Headers,$ZoneId,$RecordsetId,$IP)
+    Param($Headers, $ZoneId, $RecordsetId, $IP)
     $body = @"
 {
     "records": ["$IP"]
@@ -119,7 +119,8 @@ function Update-IP {
     try {
         $response = Invoke-RestMethod -Uri "https://dns.myhuaweicloud.com/v2.1/zones/$ZoneId/recordsets/$RecordsetId" -Headers $Headers -Method PUT -Body $body
         $response | Format-Table | Out-String | Write-Host
-    } catch {
+    }
+    catch {
         Write-Error $_.Exception.Message
         Exit 51
     }
@@ -131,11 +132,7 @@ Write-Host ""
 $headers = Get-Headers $account $password
 Write-Host ""
 $recordset_id = Search-RecordsetId $headers $domain $ip
-If ($ip.Contains(".")) {
-    Test-IPv4 $ip
-} ElseIf ($ip.Contains(":")) {
-    Test-IPv6 $ip
-}
+Test-IP $ip
 Write-Host ""
 $best = Get-Best $ip
 Write-Host ""
