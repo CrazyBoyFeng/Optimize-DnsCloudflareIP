@@ -1,11 +1,15 @@
 #!/bin/bash
-#请先去 DNSPod 后台增加一条A记录或AAAA记录然后填写以下参数：
+
+#请先去 DNSPod 后台增加一条 A 记录或 AAAA 记录然后填写以下参数：
 sub_domain="你的主机记录（不含主域名部分）若只有主域名则留空或删除该参数"
 domain="你的主域名"
+
 #以下两项从控制台生成 https://console.dnspod.cn/account_id/token
 account_id="ID"
 token="Token"
+
 #以上为需要手动填写的内容。
+
 cd `dirname $BASH_SOURCE`
 curl=`command -v curl 2> /dev/null`
 
@@ -24,18 +28,22 @@ function get_ip {
     echo "Current IP: $ip"
 }
 
-function test_ipv4 {
+function test_ip {
+case $ip in 
+*"."*)
     cp -f ip.txt ip.tmp
     echo "" >> ip.tmp
     echo "$ip/32" >> ip.tmp
-    ./CloudflareST -f ip.tmp -httping -n 50 -t 5 -p 0 -dd
-    rm -f ip.tmp
-}
-
-function test_ipv6 {
+    ;;
+*":"*)
     cp -f ipv6.txt ip.tmp
     echo "" >> ip.tmp
     echo "$ip/128" >> ip.tmp
+    ;;
+*)
+    exit 2
+    ;;
+esac
     ./CloudflareST -f ip.tmp -httping -n 50 -t 5 -p 0 -dd
     rm -f ip.tmp
 }
@@ -97,14 +105,7 @@ fi
 headers="login_token=$account_id,$token&lang=cn&format=json&domain=$domain&sub_domain=$rr"
 echo
 search_record
-case $ip in 
-*"."*)
-    test_ipv4;;
-*":"*)
-    test_ipv6;;
-*)
-    exit 2;;
-esac
+test_ip
 echo
 get_best
 echo
