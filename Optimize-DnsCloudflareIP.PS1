@@ -132,8 +132,17 @@ Write-Host ""
 $headers = Get-Headers $account $password
 Write-Host ""
 $recordset_id = Search-RecordsetId $headers $domain $ip
-Test-IP $ip
-Write-Host ""
-$best = Get-Best $ip
-Write-Host ""
+If (Test-Path Find-BetterCloudflareIP.PS1) {
+    $best = Find-BetterCloudflareIP $ip 
+}
+ElseIf (Test-Path CloudflareST.exe) {
+    Test-IP $ip
+    Write-Host ""
+    $best = Get-Best $ip
+    Write-Host ""
+}
+Else {
+    Write-Error "Find-BetterCloudflareIP.PS1 or CloudflareST.exe not found!"
+    Exit 1
+}
 Update-IP $headers $zone_id $recordset_id $best

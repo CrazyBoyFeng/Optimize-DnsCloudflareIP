@@ -1,12 +1,13 @@
 # 优化 DNS Cloudflare IP
 脚本：查找最快 Cloudflare IP 并更新域名解析记录。
+_需与 [Find-BetterCloudflareIP](https://github.com/CrazyBoyFeng/Find-BetterCloudflareIP) 或 [CloudflareSpeedTest](https://github.com/XIU2/CloudflareSpeedTest) 项目配合使用。_
 
 ## 如何使用
-登录 DNS 服务提供商控制台，添加域名解析记录。  
+首先登录 DNS 服务提供商控制台，添加域名解析记录。  
 _请注意：目标域名的初始 IP 记录不能与其它记录重复。_
 
 ### Windows
-1. 下载脚本启动器 `Optimize-DnsCloudflareIP.Cmd` 和脚本 `Optimize-DnsCloudflareIP.PS1` 至 `CloudflareST.Exe` 所在文件夹。  
+1. 下载脚本启动器 `Optimize-DnsCloudflareIP.Cmd` 和脚本 `Optimize-DnsCloudflareIP.PS1` 至 `Find-BetterCloudflareIP.PS1` 或 `CloudflareST.Exe` 所在文件夹。  
 2. 修改 `Optimize-DnsCloudflareIP.PS1`，按要求填写参数。
 3. 执行 `Optimize-DnsCloudflareIP.Cmd`。默认常规窗口模式。结束后暂停。可通过参数调整启动器：
 * `Optimize-DnsCloudflareIP.Cmd Minimized` 最小化窗口模式。仅错误时暂停。
