@@ -21,7 +21,7 @@ function Get-IP {
 }
 
 function Get-Token {
-    Param($Account, $Password)
+    Param($Account, [SecureString] $Password)
     $body = @"
 {
     "auth": {
@@ -64,7 +64,7 @@ function Get-Token {
 }
 
 function Get-Headers {
-    Param($Account, $Password)
+    Param($Account, [SecureString] $Password)
     $token = Get-Token $Account $Password
     $headers = @{"X-Auth-Token" = $token }
     Return $headers
