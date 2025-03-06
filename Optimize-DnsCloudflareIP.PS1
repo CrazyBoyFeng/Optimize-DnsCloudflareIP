@@ -118,7 +118,7 @@ function Update-IP {
 "@
     try {
         $response = Invoke-RestMethod -Uri "https://dns.myhuaweicloud.com/v2.1/zones/$ZoneId/recordsets/$RecordsetId" -Headers $Headers -Method PUT -Body $body
-        $response | Format-Table | Out-String | Write-Host
+        $response | Write-Output | Out-Host
     }
     catch {
         Write-Error $_.Exception.Message
