@@ -1,5 +1,5 @@
 # 优化 DNS Cloudflare IP
-脚本：查找最快 Cloudflare IP 并更新域名解析记录。
+脚本：查找最快 Cloudflare IP 并更新域名解析记录。  
 _需与 [Find-BetterCloudflareIP](https://github.com/CrazyBoyFeng/Find-BetterCloudflareIP) 或 [CloudflareSpeedTest](https://github.com/XIU2/CloudflareSpeedTest) 项目配合使用。_
 
 ## 如何使用
