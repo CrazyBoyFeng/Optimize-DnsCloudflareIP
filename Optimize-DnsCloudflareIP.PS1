@@ -1,12 +1,12 @@
-#ÇëÏÈÈ¥ DNSPod ºóÌ¨Ôö¼ÓÒ»Ìõ A »ò AAAA ¼ÇÂ¼È»ºóÌîĞ´ÒÔÏÂ²ÎÊı£º
-$sub_domain = "ÄãµÄÖ÷»ú¼ÇÂ¼£¨²»º¬Ö÷ÓòÃû²¿·Ö£©ÈôÖ»ÓĞÖ÷ÓòÃûÔòÁô¿Õ»òÉ¾³ı¸Ã²ÎÊı"
-$domain = "ÄãµÄÖ÷ÓòÃû"
+#è¯·å…ˆå» DNSPod åå°å¢åŠ ä¸€æ¡ A æˆ– AAAA è®°å½•ç„¶åå¡«å†™ä»¥ä¸‹å‚æ•°ï¼š
+$sub_domain = "ä½ çš„ä¸»æœºè®°å½•ï¼ˆä¸å«ä¸»åŸŸåéƒ¨åˆ†ï¼‰è‹¥åªæœ‰ä¸»åŸŸååˆ™ç•™ç©ºæˆ–åˆ é™¤è¯¥å‚æ•°"
+$domain = "ä½ çš„ä¸»åŸŸå"
 
-#ÒÔÏÂÁ½Ïî´Ó¿ØÖÆÌ¨Éú³É https://console.dnspod.cn/account_id/token
+#ä»¥ä¸‹ä¸¤é¡¹ä»æ§åˆ¶å°ç”Ÿæˆ https://console.dnspod.cn/account_id/token
 $account_id = "ID"
 $token = "Token"
 
-#ÒÔÉÏÎªĞèÒªÊÖ¶¯ÌîĞ´µÄÄÚÈİ¡£
+#ä»¥ä¸Šä¸ºéœ€è¦æ‰‹åŠ¨å¡«å†™çš„å†…å®¹ã€‚
 
 Set-Location -Path $PSScriptRoot
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -93,8 +93,17 @@ Else {
 $headers = "login_token=$account_id,$token&lang=cn&format=json&domain=$domain&sub_domain=$rr"
 Write-Host ""
 $record_id, $record_line_id = Search-Record $headers $ip
-Test-IP $ip
-Write-Host ""
-$best = Get-Best $ip
-Write-Host ""
+If (Test-Path Find-BetterCloudflareIP.PS1) {
+    $best = .\Find-BetterCloudflareIP.PS1 $ip
+}
+ElseIf (Test-Path CloudflareST.exe) {
+    Test-IP $ip
+    Write-Host ""
+    $best = Get-Best $ip
+    Write-Host ""
+}
+Else {
+    Write-Error "Find-BetterCloudflareIP.PS1 or CloudflareST.exe not found!"
+    Exit 1
+}
 Update-IP $headers $record_id $record_line_id $best
