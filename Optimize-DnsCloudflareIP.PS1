@@ -1,12 +1,12 @@
-#请先去 DNSPod 后台增加一条 A 或 AAAA 记录然后填写以下参数：
-$sub_domain = "你的主机记录（不含主域名部分）若只有主域名则留空或删除该参数"
-$domain = "你的主域名"
+#请先�? DNSPod 后台增加一�? A �? AAAA 记录然后�?写以下参数：
+$sub_domain = "你的主机记录（不�?主域名部分）若只有主域名则留空或删除该参�?"
+$domain = "你的主域�?"
 
 #以下两项从控制台生成 https://console.dnspod.cn/account_id/token
 $account_id = "ID"
 $token = "Token"
 
-#以上为需要手动填写的内容。
+#以上为需要手动填写的内�?��?
 
 Set-Location -Path $PSScriptRoot
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -63,9 +63,6 @@ function Get-Best {
         Exit 31
     }
     Write-Host "Best Cloudflare IP: $best"
-    If ("$IP" -Eq "$best") {
-        Exit
-    }
     Return $best
 }
 
@@ -105,5 +102,9 @@ ElseIf (Test-Path CloudflareST.exe) {
 Else {
     Write-Error "Find-BetterCloudflareIP.PS1 or CloudflareST.exe not found!"
     Exit 1
+}
+If ("$ip" -Eq "$best") {
+    Write-Host "Current IP is already the best"
+    Exit
 }
 Update-IP $headers $record_id $record_line_id $best
