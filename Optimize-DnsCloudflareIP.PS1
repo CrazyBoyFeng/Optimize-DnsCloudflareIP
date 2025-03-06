@@ -1,9 +1,9 @@
-#ÇëÏÈÈ¥»ªÎªÔÆ½âÎöºóÌ¨Ôö¼ÓÒ»Ìõ A ¼ÇÂ¼»ò AAAA ¼ÇÂ¼È»ºóÌîĞ´ÒÔÏÂ²ÎÊı£º
-$domain = "ÄãµÄÓòÃû£¨¿ÉÒÔÊÇ×ÓÓòÃû£©"
-$zone_id = "ÓòÃû ID£¨¿ØÖÆÌ¨¿É²é£©"
-$account = "ÓÃ»§ÕË»§"
-$password = "ÓÃ»§ÃÜÂë"
-#ÒÔÉÏÎªĞèÒªÊÖ¶¯ÌîĞ´µÄÄÚÈİ¡£
+#ï¿½ï¿½ï¿½ï¿½È¥ï¿½ï¿½Îªï¿½Æ½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ A ï¿½ï¿½Â¼ï¿½ï¿½ AAAA ï¿½ï¿½Â¼È»ï¿½ï¿½ï¿½ï¿½Ğ´ï¿½ï¿½ï¿½Â²ï¿½ï¿½ï¿½ï¿½ï¿½
+$domain = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+$zone_id = "ï¿½ï¿½ï¿½ï¿½ IDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½É²é£©"
+$account = "ï¿½Ã»ï¿½ï¿½Ë»ï¿½"
+$password = "ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½"
+#ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Òªï¿½Ö¶ï¿½ï¿½ï¿½Ğ´ï¿½ï¿½ï¿½ï¿½ï¿½İ¡ï¿½
 
 Set-Location -Path $PSScriptRoot
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -32,16 +32,16 @@ function Get-Token {
             "password": {
                 "user": {
                     "domain": {
-                        "name": "$Account"//IAMÓÃ»§ËùÊôÕËºÅÃû
+                        "name": "$Account"//IAMï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½
                     },
-                    "name": "$Account",//IAMÓÃ»§Ãû
-                    "password": "$Password"//IAMÓÃ»§ÃÜÂë
+                    "name": "$Account",//IAMï¿½Ã»ï¿½ï¿½ï¿½
+                    "password": "$Password"//IAMï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
                 }
             }
         },
         "scope": {
             "domain": {
-                "name": "$Account"//IAMÓÃ»§ËùÊôÕËºÅÃû
+                "name": "$Account"//IAMï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½
             }
         }
     }
@@ -133,7 +133,7 @@ $headers = Get-Headers $account $password
 Write-Host ""
 $recordset_id = Search-RecordsetId $headers $domain $ip
 If (Test-Path Find-BetterCloudflareIP.PS1) {
-    $best = Find-BetterCloudflareIP $ip 
+    $best = .\Find-BetterCloudflareIP.PS1 $ip 
 }
 ElseIf (Test-Path CloudflareST.exe) {
     Test-IP $ip
