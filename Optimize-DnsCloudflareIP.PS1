@@ -96,16 +96,12 @@ function Test-IP {
 }
 
 function Get-Best {
-    Param($IP)
     $best = (Import-CSV result.csv)[0].psobject.properties.value[0]
     If (!$best) {
         Write-Error "Can not get the best Cloudflare IP"
         Exit 41
     }
     Write-Host "Best Cloudflare IP: $best"
-    If ("$IP" -Eq "$best") {
-        Exit
-    }
     Return $best
 }
 
@@ -133,7 +129,7 @@ $headers = Get-Headers $account $password
 Write-Host ""
 $recordset_id = Search-RecordsetId $headers $domain $ip
 If (Test-Path Find-BetterCloudflareIP.PS1) {
-    $best = .\Find-BetterCloudflareIP.PS1 $ip 
+    $best = .\Find-BetterCloudflareIP.PS1 $ip
 }
 ElseIf (Test-Path CloudflareST.exe) {
     Test-IP $ip
@@ -144,5 +140,9 @@ ElseIf (Test-Path CloudflareST.exe) {
 Else {
     Write-Error "Find-BetterCloudflareIP.PS1 or CloudflareST.exe not found!"
     Exit 1
+}
+If ("$ip" -Eq "$best") {
+    Write-Host "Current IP is already the best"
+    Exit
 }
 Update-IP $headers $zone_id $recordset_id $best
