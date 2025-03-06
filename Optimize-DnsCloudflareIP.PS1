@@ -74,7 +74,7 @@ function Update-IP {
     $body = "$Headers&record_id=$RecordId&record_line_id=$RecordLineId&value=$IP"
     try {
         $response = Invoke-RestMethod -Uri "https://dnsapi.cn/Record.Ddns" -Method POST -Body $body
-        $response | Format-Table | Out-String | Write-Host
+        $response | Write-Output | Out-Host
     }
     catch {
         Write-Error $_.Exception.Message
